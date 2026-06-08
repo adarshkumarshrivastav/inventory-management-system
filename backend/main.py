@@ -15,10 +15,7 @@ app = FastAPI(title="Inventory & Order Management API")
 # 2. Paste this CORS configuration block right here:
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173",    # Standard Vite local address
-        "http://127.0.0.1:5173"     # Alternative local loopback address
-    ],
+     allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],            # Allows GET, POST, PUT, DELETE, etc.
     allow_headers=["*"],            # Allows all configuration headers
