@@ -8,7 +8,7 @@ import Orders from './components/Orders';
 function App() {
   // Navigation State
   const [currentTab, setCurrentTab] = useState('dashboard');
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   // Core Data Metrics State [cite: 127]
   const [stats, setStats] = useState({
