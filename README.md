@@ -3,7 +3,7 @@
 A production-grade, full-stack enterprise resource tracking platform built using a containerized decoupled architecture. This application manages live product warehouses, maintains synchronized customer registries, enforces real-time transactional order processing limits, and delivers automated database-driven inventory threshold logic.
 
 ## 🚀 Live Production Links
-* **Production UI Dashboard:** [Live Frontend Deployment](https://inventory-management-system-lg80wzkm2.vercel.app/)
+* **Production UI Dashboard:** [Live Frontend Deployment](https://inventory-management-system.vercel.app) *(Replace with your exact clean domain link)*
 * **Production API Engine:** [Live FastAPI Service Gateway](https://inventory-backend-api-9rbf.onrender.com)
 * **Docker Hub Container Registry:** [Public Image Repository](https://hub.docker.com/r/adarsh000999/inventory-backend)
 
