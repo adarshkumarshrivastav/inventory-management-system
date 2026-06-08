@@ -21,6 +21,80 @@ app.add_middleware(
     allow_headers=["*"],            # Allows all configuration headers
 )
 
+@app.get("/", response_class=HTMLResponse)
+async def root():
+    return """
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>IMS API - Live Status</title>
+        <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    </head>
+    <body class="bg-slate-900 text-slate-100 font-sans flex items-center justify-center min-h-screen p-4">
+        <div class="max-w-2xl w-full bg-slate-800/50 backdrop-blur-md border border-slate-700/50 rounded-2xl p-8 shadow-2xl space-y-6">
+            
+            <div class="flex items-center justify-between border-b border-slate-700/60 pb-6">
+                <div>
+                    <h1 class="text-2xl font-extrabold tracking-tight text-white flex items-center gap-2">
+                        <i class="fa-solid fa-cubes text-cyan-400"></i> IMS Engine
+                    </h1>
+                    <p class="text-sm text-slate-400 mt-1">Inventory Management System core services</p>
+                </div>
+                <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 animate-pulse">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400"></span> ENGINE ONLINE
+                </span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="bg-slate-900/40 p-4 rounded-xl border border-slate-700/30 flex items-center gap-4">
+                    <div class="p-3 rounded-lg bg-cyan-500/10 text-cyan-400">
+                        <i class="fa-brands fa-python text-xl"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs text-slate-400 uppercase tracking-wider font-medium">Framework</p>
+                        <p class="text-sm font-semibold text-slate-200">FastAPI (Python)</p>
+                    </div>
+                </div>
+                <div class="bg-slate-900/40 p-4 rounded-xl border border-slate-700/30 flex items-center gap-4">
+                    <div class="p-3 rounded-lg bg-blue-500/10 text-blue-400">
+                        <i class="fa-brands fa-docker text-xl"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs text-slate-400 uppercase tracking-wider font-medium">Environment</p>
+                        <p class="text-sm font-semibold text-slate-200">Docker Containerized</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="space-y-3">
+                <h3 class="text-sm font-bold uppercase tracking-wider text-slate-400">Available Gateways</h3>
+                <div class="flex flex-col sm:flex-row gap-3">
+                    <a href="/docs" target="_blank" class="flex-1 flex items-center justify-between p-4 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 transition-all shadow-md group">
+                        <span class="font-medium text-white flex items-center gap-2">
+                            <i class="fa-solid fa-book-open"></i> Interactive API Docs
+                        </span>
+                        <i class="fa-solid fa-arrow-right transition-transform group-hover:translate-x-1"></i>
+                    </a>
+                    <a href="/products" target="_blank" class="flex-1 flex items-center justify-between p-4 rounded-xl bg-slate-700/40 hover:bg-slate-700/70 border border-slate-600/30 transition-all group">
+                        <span class="font-medium text-slate-200 flex items-center gap-2">
+                            <i class="fa-solid fa-boxes-stacked"></i> Products Endpoint
+                        </span>
+                        <i class="fa-solid fa-code text-slate-400 transition-colors group-hover:text-cyan-400"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="text-center text-xs text-slate-500 border-t border-slate-700/40 pt-4">
+                Architecture validated & deployed cleanly to production cloud environments.
+            </div>
+        </div>
+    </body>
+    </html>
+    """
+
 # ==========================================
 # PRODUCT ENDPOINTS & BUSINESS LOGIC
 # ==========================================
