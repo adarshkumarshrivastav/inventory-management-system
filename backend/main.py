@@ -3,6 +3,7 @@ from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware 
 from sqlalchemy.orm import Session
 from typing import List
+from fastapi.responses import HTMLResponse
 
 import models
 import schemas
