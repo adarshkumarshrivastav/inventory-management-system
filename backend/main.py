@@ -79,11 +79,11 @@ async def root():
                         </span>
                         <i class="fa-solid fa-arrow-right transition-transform group-hover:translate-x-1"></i>
                     </a>
-                    <a href="/products" target="_blank" class="flex-1 flex items-center justify-between p-4 rounded-xl bg-slate-700/40 hover:bg-slate-700/70 border border-slate-600/30 transition-all group">
+                    <a href="/explore/products" class="flex-1 flex items-center justify-between p-4 rounded-xl bg-slate-700/40 hover:bg-slate-700/70 border border-slate-600/30 transition-all group">
                         <span class="font-medium text-slate-200 flex items-center gap-2">
-                            <i class="fa-solid fa-boxes-stacked"></i> Products Endpoint
+                            <i class="fa-solid fa-boxes-stacked text-cyan-400"></i> Products Catalog
                         </span>
-                        <i class="fa-solid fa-code text-slate-400 transition-colors group-hover:text-cyan-400"></i>
+                        <i class="fa-solid fa-arrow-right text-slate-400 transition-transform group-hover:translate-x-1 group-hover:text-cyan-400"></i>
                     </a>
                 </div>
             </div>
@@ -91,6 +91,83 @@ async def root():
             <div class="text-center text-xs text-slate-500 border-t border-slate-700/40 pt-4">
                 Architecture validated & deployed cleanly to production cloud environments.
             </div>
+        </div>
+    </body>
+    </html>
+    """
+
+@app.get("/explore/products", response_class=HTMLResponse)
+def explore_products_ui(db: Session = Depends(get_db)):
+    products = db.query(models.Product).order_by(models.Product.name).all()
+    
+    product_cards = ""
+    if not products:
+        product_cards = """
+        <div class="col-span-full text-center py-16 bg-slate-800/20 rounded-2xl border border-dashed border-slate-700/60">
+            <i class="fa-solid fa-box-open text-5xl text-slate-600 mb-4 block"></i>
+            <h3 class="text-lg font-bold text-slate-300">No Inventory Found</h3>
+            <p class="text-sm text-slate-500 mt-1">Populate items using your active frontend interface panel.</p>
+        </div>
+        """
+    else:
+        for p in products:
+            # Dynamic stock badge calculation
+            if p.quantity >= 10:
+                stock_badge = f'<span class="px-2.5 py-1 rounded-md bg-emerald-500/10 text-emerald-400 text-xs font-semibold border border-emerald-500/20">{p.quantity} In Stock</span>'
+            else:
+                stock_badge = f'<span class="px-2.5 py-1 rounded-md bg-rose-500/10 text-rose-400 text-xs font-semibold border border-rose-500/20 animate-pulse">{p.quantity} Low Stock</span>'
+            
+            product_cards += f"""
+            <div class="bg-slate-800/40 border border-slate-700/40 rounded-xl p-6 hover:border-slate-600/80 transition-all duration-200 shadow-lg flex flex-col justify-between group">
+                <div>
+                    <div class="flex justify-between items-start gap-4 mb-2">
+                        <h3 class="text-lg font-bold text-white tracking-tight group-hover:text-cyan-400 transition-colors">{p.name}</h3>
+                        {stock_badge}
+                    </div>
+                    <p class="text-sm text-slate-400 line-clamp-2 mb-4">{p.description or 'No product description available.'}</p>
+                </div>
+                <div class="flex justify-between items-center pt-4 border-t border-slate-700/40">
+                    <span class="text-xs font-mono text-slate-500 tracking-wider bg-slate-900/60 px-2 py-1 rounded">SKU: {p.sku}</span>
+                    <span class="text-lg font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400">${p.price:,.2f}</span>
+                </div>
+            </div>
+            """
+
+    return f"""
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Product Catalog Showcase</title>
+        <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    </head>
+    <body class="bg-slate-900 text-slate-100 font-sans min-h-screen p-4 sm:p-8">
+        <div class="max-w-5xl mx-full mx-auto space-y-8">
+            
+            <div class="flex items-center gap-2 text-sm text-slate-400">
+                <a href="/" class="hover:text-cyan-400 transition-colors flex items-center gap-1.5"><i class="fa-solid fa-house text-xs"></i> Engine Root</a>
+                <i class="fa-solid fa-chevron-right text-xs text-slate-600"></i>
+                <span class="text-slate-200 font-medium">Products Catalog</span>
+            </div>
+
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-6">
+                <div>
+                    <h1 class="text-3xl font-black tracking-tight text-white flex items-center gap-3">
+                        <i class="fa-solid fa-boxes-stacked text-cyan-400"></i> Live Inventory Database
+                    </h1>
+                    <p class="text-sm text-slate-400 mt-1">Real-time dynamic display extracted directly via SQLAlchemy Core layer mappings.</p>
+                </div>
+                <div class="text-xs font-mono text-slate-400 bg-slate-800/40 border border-slate-700/40 rounded-lg px-4 py-2.5 self-start sm:self-center flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-cyan-400"></span> Total Loaded: <span class="font-bold text-white">{len(products)}</span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {product_cards}
+            </div>
+            
         </div>
     </body>
     </html>
