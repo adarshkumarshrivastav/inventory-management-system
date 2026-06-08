@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  # --- PostgreSQL Local Database Engine --- [cite: 141]
+  db:
+    image: postgres:15-alpine
+    container_name: inventory_db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: localpassword123
+      POSTGRES_DB: inventory_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - [cite_start]postgres_data:/var/lib/postgresql/data # [cite: 145]
+
+  # --- FastAPI Application Backend Engine --- [cite: 140]
+  backend:
+    build: 
+      context: ./backend
+    container_name: inventory_backend
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://postgres:localpassword123@db:5432/inventory_db
+    depends_on:
+      - db
+
+  # --- React Application Frontend Engine --- [cite: 139]
+  frontend:
+    build:
+      context: ./frontend
+    container_name: inventory_frontend
+    ports:
+      - [cite_start]"3000:80" # Maps local port 3000 on your machine to container port 80 [cite: 131]
+    environment:
+      - VITE_API_URL=http://localhost:8000
+    depends_on:
+      - backend
+
+volumes:
+  [cite_start]postgres_data: # [cite: 145]
