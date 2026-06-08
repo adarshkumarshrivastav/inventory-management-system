@@ -24,4 +24,4 @@ jobs:
           file: ./backend/Dockerfile
           push: true
           # Replace YOUR_DOCKERHUB_USERNAME with your actual Docker Hub username
-          tags: YOUR_DOCKERHUB_USERNAME/inventory-backend:latest
+          tags: adarsh000999/inventory-backend:latest
